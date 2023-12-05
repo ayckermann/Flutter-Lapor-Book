@@ -1,55 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_lapor_book/components/styles.dart';
 
-class DashboardPage extends StatelessWidget {
-  const DashboardPage({super.key});
-
+class AllLaporan extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return DashboardFull();
-  }
-}
-
-class DashboardFull extends StatefulWidget {
-  const DashboardFull({super.key});
-
-  @override
-  State<StatefulWidget> createState() => _DashboardFull();
-}
-
-class _DashboardFull extends State<DashboardFull> {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: primaryColor,
-        child: Icon(Icons.add, size: 35),
-        onPressed: () {
-          Navigator.pushNamed(context, '/add');
-        },
-      ),
-      appBar: AppBar(
-        backgroundColor: primaryColor,
-        title: Text('Lapor Book', style: header2),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: ListView.builder(
-            itemCount: 2,
+    return SafeArea(
+      child: Container(
+        width: double.infinity,
+        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              childAspectRatio: 1 / 1.234,
+            ),
+            itemCount: 7,
             itemBuilder: (context, index) {
-              return InkWell(
-                onTap: () {},
-                child: Container(
-                  margin: EdgeInsets.only(left: 40, right: 40, top: 20),
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 2),
-                      borderRadius: BorderRadius.circular(10)),
+              return Container(
+                // margin: EdgeInsets.only(left: 40, right: 40, top: 20),
+
+                decoration: BoxDecoration(
+                    border: Border.all(width: 2),
+                    borderRadius: BorderRadius.circular(10)),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/detail');
+                  },
                   child: Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Image.asset('assets/istock-default.jpg'),
+                      Image.asset(
+                        'assets/istock-default.jpg',
+                        width: 130,
+                        height: 130,
                       ),
                       Container(
                         width: double.infinity,
@@ -58,14 +41,16 @@ class _DashboardFull extends State<DashboardFull> {
                         decoration: BoxDecoration(
                             border: Border.symmetric(
                                 horizontal: BorderSide(width: 2))),
-                        child:
-                            Text('Judul Laporan', style: headerStyle(level: 2)),
+                        child: Text(
+                          'Judul Laporan',
+                          style: headerStyle(level: 4),
+                        ),
                       ),
                       Row(
                         children: [
                           Expanded(
                             child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 13),
+                              padding: const EdgeInsets.symmetric(vertical: 8),
                               decoration: BoxDecoration(
                                   color: warningColor,
                                   borderRadius: const BorderRadius.only(
@@ -74,13 +59,15 @@ class _DashboardFull extends State<DashboardFull> {
                                   border: const Border.symmetric(
                                       vertical: BorderSide(width: 1))),
                               alignment: Alignment.center,
-                              child: Text('Posted',
-                                  style: headerStyle(level: 3, dark: false)),
+                              child: Text(
+                                'Posted',
+                                style: headerStyle(level: 5, dark: false),
+                              ),
                             ),
                           ),
                           Expanded(
                             child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 13),
+                              padding: const EdgeInsets.symmetric(vertical: 8),
                               decoration: BoxDecoration(
                                   color: primaryColor,
                                   borderRadius: const BorderRadius.only(
@@ -88,8 +75,10 @@ class _DashboardFull extends State<DashboardFull> {
                                   border: const Border.symmetric(
                                       vertical: BorderSide(width: 1))),
                               alignment: Alignment.center,
-                              child: Text('17/06/2023',
-                                  style: headerStyle(level: 3, dark: false)),
+                              child: Text(
+                                '17/06/2023',
+                                style: headerStyle(level: 5, dark: false),
+                              ),
                             ),
                           )
                         ],
@@ -100,6 +89,6 @@ class _DashboardFull extends State<DashboardFull> {
               );
             }),
       ),
-    ));
+    );
   }
 }

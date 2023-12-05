@@ -11,7 +11,7 @@ TextStyle header2 = TextStyle(fontSize: 24, fontWeight: FontWeight.bold);
 TextStyle header3 = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
 
 TextStyle headerStyle({int level = 1, bool dark = true}) {
-  List<double> levelSize = [30, 24, 20];
+  List<double> levelSize = [30, 24, 20, 14, 12];
   return TextStyle(
       fontSize: levelSize[level - 1],
       fontWeight: FontWeight.bold,

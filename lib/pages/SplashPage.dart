@@ -1,22 +1,13 @@
 import 'package:flutter/material.dart';
 
-class SplashPage extends StatelessWidget {
+class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SplashFull();
-  }
+  State<StatefulWidget> createState() => _SplashPageState();
 }
 
-class SplashFull extends StatefulWidget {
-  const SplashFull({super.key});
-
-  @override
-  State<StatefulWidget> createState() => _SplashPage();
-}
-
-class _SplashPage extends State<SplashFull> {
+class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
@@ -28,11 +19,10 @@ class _SplashPage extends State<SplashFull> {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-        home: Scaffold(
+    return const Scaffold(
       body: Center(
         child: Text('Selamat datang di Aplikasi Laporan'),
       ),
-    ));
+    );
   }
 }
