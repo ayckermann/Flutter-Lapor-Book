@@ -15,6 +15,12 @@ class _RegisterPageState extends State<RegisterPage> {
 
   TextEditingController _password = TextEditingController();
 
+  String? nama;
+  String? email;
+  String? noHP;
+  String? password;
+  String? password2;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,18 +47,27 @@ class _RegisterPageState extends State<RegisterPage> {
                         InputLayout(
                             'Nama',
                             TextFormField(
+                              onChanged: (String value) => setState(() {
+                                      nama = value;
+                                    }),
                                 validator: notEmptyValidator,
                                 decoration:
                                     customInputDecoration("Nama Lengkap"))),
                         InputLayout(
                             'Email',
                             TextFormField(
+                                onChanged: (String value) => setState(() {
+                                      email = value;
+                                    }),
                                 validator: notEmptyValidator,
                                 decoration:
                                     customInputDecoration("email@email.com"))),
                         InputLayout(
                             'No. Handphone',
                             TextFormField(
+                              onChanged: (String value) => setState(() {
+                                      noHP = value;
+                                    }),
                                 validator: notEmptyValidator,
                                 decoration:
                                     customInputDecoration("+62 80000000"))),
@@ -76,7 +91,14 @@ class _RegisterPageState extends State<RegisterPage> {
                           child: FilledButton(
                               style: buttonStyle,
                               child: Text('Register', style: header2),
-                              onPressed: () {}),
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  Navigator.pushNamedAndRemoveUntil(
+                                      context,
+                                      '/login',
+                                      ModalRoute.withName('/login'));
+                                }
+                              }),
                         )
                       ],
                     )),

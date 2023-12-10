@@ -55,10 +55,12 @@ class LoginPageState extends State<LoginPage> {
                               child: Text('Login',
                                   style: headerStyle(level: 3, dark: false)),
                               onPressed: () {
-                                Navigator.pushNamedAndRemoveUntil(
-                                    context,
-                                    '/dashboard',
-                                    ModalRoute.withName('/dashboard'));
+                                if (_formKey.currentState!.validate()) {
+                                  Navigator.pushNamedAndRemoveUntil(
+                                      context,
+                                      '/dashboard',
+                                      ModalRoute.withName('/dashboard'));
+                                }
                               }),
                         )
                       ],
