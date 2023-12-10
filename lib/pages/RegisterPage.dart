@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_lapor_book/components/styles.dart';
 import 'package:flutter_lapor_book/components/validators.dart';
 import 'package:flutter_lapor_book/components/input_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -12,14 +14,57 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  TextEditingController _password = TextEditingController();
+  bool _isLoading = false;
 
-  String? nama;
-  String? email;
-  String? noHP;
-  String? password;
-  String? password2;
+  final TextEditingController namaController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController noHPController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  void initState() {
+    super.initState();
+  }
+
+  void register() async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      CollectionReference akunCollection =
+          FirebaseFirestore.instance.collection('akun');
+
+      final navigator = Navigator.of(context);
+
+      final nama = namaController.text;
+      final email = emailController.text;
+      final noHP = noHPController;
+      final password = passwordController.text;
+      // final confirmPassword = confirmPasswordController.text;
+
+      await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+
+      await akunCollection.add({
+        'uid': _auth.currentUser!.uid,
+        'nama': nama,
+        'email': email,
+        'noHP': noHP,
+        'docId': akunCollection.id,
+        // ignore: invalid_return_type_for_catch_error
+      }).catchError((error) => print("Failed to add user: $error"));
+
+      navigator.pop();
+    } catch (e) {
+      final snackbar = SnackBar(content: Text(e.toString()));
+      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,42 +92,36 @@ class _RegisterPageState extends State<RegisterPage> {
                         InputLayout(
                             'Nama',
                             TextFormField(
-                              onChanged: (String value) => setState(() {
-                                      nama = value;
-                                    }),
+                                controller: namaController,
                                 validator: notEmptyValidator,
                                 decoration:
                                     customInputDecoration("Nama Lengkap"))),
                         InputLayout(
                             'Email',
                             TextFormField(
-                                onChanged: (String value) => setState(() {
-                                      email = value;
-                                    }),
+                                controller: emailController,
                                 validator: notEmptyValidator,
                                 decoration:
                                     customInputDecoration("email@email.com"))),
                         InputLayout(
                             'No. Handphone',
                             TextFormField(
-                              onChanged: (String value) => setState(() {
-                                      noHP = value;
-                                    }),
+                                controller: noHPController,
                                 validator: notEmptyValidator,
                                 decoration:
                                     customInputDecoration("+62 80000000"))),
                         InputLayout(
                             'Password',
                             TextFormField(
-                                controller: _password,
+                                controller: passwordController,
                                 validator: notEmptyValidator,
                                 obscureText: true,
                                 decoration: customInputDecoration(""))),
                         InputLayout(
                             'Konfirmasi Password',
                             TextFormField(
-                                validator: (value) =>
-                                    passConfirmationValidator(value, _password),
+                                validator: (value) => passConfirmationValidator(
+                                    value, passwordController),
                                 obscureText: true,
                                 decoration: customInputDecoration(""))),
                         Container(
@@ -93,10 +132,9 @@ class _RegisterPageState extends State<RegisterPage> {
                               child: Text('Register', style: header2),
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
-                                  Navigator.pushNamedAndRemoveUntil(
-                                      context,
-                                      '/login',
-                                      ModalRoute.withName('/login'));
+                                  register();
+                                  Navigator.pushNamedAndRemoveUntil(context,
+                                      '/login', ModalRoute.withName('/login'));
                                 }
                               }),
                         )

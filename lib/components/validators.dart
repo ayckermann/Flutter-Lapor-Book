@@ -15,7 +15,7 @@ String? passConfirmationValidator(
     return notEmpty;
   }
 
-  if (value != passController.value) {
+  if (value != passController.value.text) {
     return "Password dan konfirmasi harus sama";
   }
 
