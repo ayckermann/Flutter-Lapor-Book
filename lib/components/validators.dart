@@ -15,7 +15,11 @@ String? passConfirmationValidator(
     return notEmpty;
   }
 
-  if (value != passController.value) {
+  if (value.length < 6) {
+    return "Password minimal 6 karakter";
+  }
+
+  if (value != passController.value.text) {
     return "Password dan konfirmasi harus sama";
   }
 
