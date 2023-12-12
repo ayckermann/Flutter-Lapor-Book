@@ -47,6 +47,7 @@ class _RegisterPageState extends State<RegisterPage> {
         'email': email,
         'noHP': noHP,
         'docId': docId,
+        'role': 'user',
       });
 
       Navigator.pushNamedAndRemoveUntil(
@@ -66,12 +67,12 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: _isLoading
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : Column(
+        child: _isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : SingleChildScrollView(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(height: 80),
@@ -146,24 +147,23 @@ class _RegisterPageState extends State<RegisterPage> {
                             ],
                           )),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Sudah punya akun? '),
+                        const Text('Sudah punya akun? '),
                         InkWell(
                           onTap: () {
-                            print('ke bagian login');
                             Navigator.pushNamed(context, '/login');
                           },
-                          child: Text('Login di sini',
+                          child: const Text('Login di sini',
                               style: TextStyle(fontWeight: FontWeight.bold)),
                         )
                       ],
                     )
                   ],
                 ),
-        ),
+              ),
       ),
     );
   }

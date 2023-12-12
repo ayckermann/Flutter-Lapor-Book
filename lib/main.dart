@@ -13,16 +13,19 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MaterialApp(
-    title: 'Lapor Book',
-    initialRoute: '/',
-    routes: {
-      '/': (context) => SplashPage(),
-      '/login': (context) => LoginPage(),
-      '/register': (context) => RegisterPage(),
-      '/dashboard': (context) => DashboardPage(),
-      '/add': (context) => AddFormPage(),
-      '/detail': (context) => DetailPage(),
-    },
-  ));
+
+  runApp(
+    MaterialApp(
+      title: 'Lapor Book',
+      initialRoute: '/',
+      routes: {
+        '/': (context) => SplashPage(),
+        '/login': (context) => LoginPage(),
+        '/register': (context) => RegisterPage(),
+        '/dashboard': (context) => DashboardPage(),
+        '/add': (context) => AddFormPage(),
+        '/detail': (context) => DetailPage(),
+      },
+    ),
+  );
 }

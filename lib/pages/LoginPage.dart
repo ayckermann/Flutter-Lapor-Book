@@ -32,8 +32,6 @@ class LoginPageState extends State<LoginPage> {
     });
 
     try {
-      final navigator = Navigator.of(context);
-
       await _auth.signInWithEmailAndPassword(
           email: email!, password: password!);
 
@@ -53,74 +51,80 @@ class LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: 80),
-              Text('Register', style: header1),
-              Container(
-                child: const Text(
-                  'Create your profile to start your journey',
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-              SizedBox(height: 50),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 30),
-                child: Form(
-                    key: _formKey,
-                    child: Column(
+        child: _isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 80),
+                    Text('Register', style: header1),
+                    Container(
+                      child: const Text(
+                        'Create your profile to start your journey',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                    const SizedBox(height: 50),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 30),
+                      child: Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                              InputLayout(
+                                  'Email',
+                                  TextFormField(
+                                      onChanged: (String value) => setState(() {
+                                            email = value;
+                                          }),
+                                      validator: notEmptyValidator,
+                                      decoration: customInputDecoration(
+                                          "email@email.com"))),
+                              InputLayout(
+                                  'Password',
+                                  TextFormField(
+                                      onChanged: (String value) => setState(() {
+                                            password = value;
+                                          }),
+                                      validator: notEmptyValidator,
+                                      obscureText: true,
+                                      decoration: customInputDecoration(""))),
+                              Container(
+                                margin: EdgeInsets.only(top: 20),
+                                width: double.infinity,
+                                child: FilledButton(
+                                    style: buttonStyle,
+                                    child: Text('Login',
+                                        style:
+                                            headerStyle(level: 3, dark: false)),
+                                    onPressed: () {
+                                      if (_formKey.currentState!.validate()) {
+                                        login();
+                                      }
+                                    }),
+                              )
+                            ],
+                          )),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        InputLayout(
-                            'Email',
-                            TextFormField(
-                                onChanged: (String value) => setState(() {
-                                      email = value;
-                                    }),
-                                validator: notEmptyValidator,
-                                decoration:
-                                    customInputDecoration("email@email.com"))),
-                        InputLayout(
-                            'Password',
-                            TextFormField(
-                                onChanged: (String value) => setState(() {
-                                      password = value;
-                                    }),
-                                validator: notEmptyValidator,
-                                obscureText: true,
-                                decoration: customInputDecoration(""))),
-                        Container(
-                          margin: EdgeInsets.only(top: 20),
-                          width: double.infinity,
-                          child: FilledButton(
-                              style: buttonStyle,
-                              child: Text('Login',
-                                  style: headerStyle(level: 3, dark: false)),
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  login();
-                                }
-                              }),
+                        const Text('Belum punya akun? '),
+                        InkWell(
+                          onTap: () =>
+                              Navigator.pushNamed(context, '/register'),
+                          child: const Text('Daftar di sini',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                         )
                       ],
-                    )),
+                    )
+                  ],
+                ),
               ),
-              SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Belum punya akun? '),
-                  InkWell(
-                    onTap: () => Navigator.pushNamed(context, '/register'),
-                    child: Text('Daftar di sini',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                  )
-                ],
-              )
-            ],
-          ),
-        ),
       ),
     );
   }

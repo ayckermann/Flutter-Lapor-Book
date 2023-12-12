@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatefulWidget {
@@ -8,13 +9,28 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  final _auth = FirebaseAuth.instance;
+
   @override
   void initState() {
     super.initState();
     // harusnya ini nanti diganti cek koneksi ke firebase dan cek login
-    Future.delayed(Duration.zero, () {
-      Navigator.pushReplacementNamed(context, '/login');
-    });
+
+    User? user = _auth.currentUser;
+
+    if (user != null) {
+      Future.delayed(Duration.zero, () {
+        Navigator.pushReplacementNamed(context, '/dashboard');
+      });
+    } else {
+      Future.delayed(Duration.zero, () {
+        Navigator.pushReplacementNamed(context, '/login');
+      });
+    }
+
+    // Future.delayed(Duration.zero, () {
+    //   Navigator.pushReplacementNamed(context, '/login');
+    // });
   }
 
   @override
