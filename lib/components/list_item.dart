@@ -8,8 +8,8 @@ import 'package:flutter_lapor_book/models/laporan.dart';
 
 class ListItem extends StatefulWidget {
   Laporan laporan;
-
-  ListItem({super.key, required this.laporan});
+  Akun akun;
+  ListItem({super.key, required this.laporan, required this.akun});
 
   @override
   State<ListItem> createState() => _ListItemState();
@@ -26,6 +26,7 @@ class _ListItemState extends State<ListItem> {
         onTap: () {
           Navigator.pushNamed(context, '/detail', arguments: {
             'laporan': widget.laporan,
+            'akun': widget.akun,
           });
         },
         child: Column(

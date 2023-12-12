@@ -18,6 +18,43 @@ class _MyLaporanState extends State<MyLaporan> {
 
   bool _isLoading = false;
   List<Laporan> listLaporan = [];
+  Akun? akun;
+
+  void getAkun() async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
+          .collection('akun')
+          .where('uid', isEqualTo: _auth.currentUser!.uid)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        var userData = querySnapshot.docs.first.data() as Map<String, dynamic>;
+
+        setState(() {
+          akun = Akun(
+            uid: userData['uid'],
+            nama: userData['nama'],
+            noHP: userData['noHP'],
+            email: userData['email'],
+            docId: userData['docId'],
+            role: userData['role'],
+          );
+        });
+      }
+    } catch (e) {
+      final snackbar = SnackBar(content: Text(e.toString()));
+      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+      print(e);
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   void getTransaksi() async {
     setState(() {
@@ -32,18 +69,14 @@ class _MyLaporanState extends State<MyLaporan> {
       setState(() {
         listLaporan.clear();
         for (var documents in querySnapshot.docs) {
-          // final komentarData = documents.data()['komentar'];
-          // List<Komentar>? komentarList;
+          List<dynamic>? komentarData = documents.data()['komentar'];
 
-          // if (komentarData != null) {
-          //   komentarList = komentarData
-          //       .map((komentar) => Komentar(
-          //             nama: komentar['nama'],
-          //             isi: komentar['isi'],
-          //           ))
-          //       .toList();
-          // }
-
+          List<Komentar>? listKomentar = komentarData?.map((map) {
+            return Komentar(
+              nama: map['nama'],
+              isi: map['isi'],
+            );
+          }).toList();
           listLaporan.add(
             Laporan(
               uid: documents.data()['uid'],
@@ -51,11 +84,12 @@ class _MyLaporanState extends State<MyLaporan> {
               judul: documents.data()['judul'],
               instansi: documents.data()['instansi'],
               deskripsi: documents.data()['deskripsi'],
+              nama: documents.data()['nama'],
               status: documents.data()['status'],
               gambar: documents.data()['gambar'],
               tanggal: documents['tanggal'].toDate(),
               maps: documents.data()['maps'],
-              // komentar: komentarList,
+              komentar: listKomentar,
             ),
           );
         }
@@ -74,6 +108,7 @@ class _MyLaporanState extends State<MyLaporan> {
   @override
   void initState() {
     super.initState();
+    getAkun();
     getTransaksi();
   }
 
@@ -98,6 +133,7 @@ class _MyLaporanState extends State<MyLaporan> {
                   itemBuilder: (context, index) {
                     return ListItem(
                       laporan: listLaporan[index],
+                      akun: akun!,
                     );
                   }),
             ),

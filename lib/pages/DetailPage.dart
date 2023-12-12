@@ -15,58 +15,13 @@ class DetailPage extends StatefulWidget {
 
 class _DetailPageState extends State<DetailPage> {
   final _firestore = FirebaseFirestore.instance;
-  final _auth = FirebaseAuth.instance;
 
   bool _isLoading = false;
-
-  String nama = '';
-
-  Akun? akun;
 
   Future launch(String uri) async {
     if (uri == '') return;
     if (!await launchUrl(Uri.parse(uri))) {
       throw Exception('Tidak dapat memanggil : $uri');
-    }
-  }
-
-  void getName(String uid) async {
-    QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
-        .collection('akun')
-        .where('uid', isEqualTo: uid)
-        .limit(1)
-        .get();
-    if (querySnapshot.docs.isNotEmpty) {
-      setState(() {
-        nama = querySnapshot.docs.first.data()['nama'];
-      });
-    }
-  }
-
-  void getAkun() async {
-    final User? user = _auth.currentUser;
-
-    QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
-        .collection('akun')
-        .where('uid', isEqualTo: user!.uid.toString())
-        .limit(1)
-        .get();
-
-    if (querySnapshot.docs.isNotEmpty) {
-      var userData = querySnapshot.docs.first.data() as Map<String, dynamic>;
-
-      setState(() {
-        akun = Akun(
-          uid: userData['uid'],
-          nama: userData['nama'],
-          noHP: userData['noHP'] as int,
-          email: userData['email'],
-          docId: userData['docId'],
-          role: userData['role'],
-        );
-      });
-    } else {
-      print('data tidak ada');
     }
   }
 
@@ -76,9 +31,7 @@ class _DetailPageState extends State<DetailPage> {
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
     Laporan laporan = arguments['laporan'];
-
-    getAkun();
-    getName(laporan.uid);
+    Akun akun = arguments['akun'];
 
     return Scaffold(
       appBar: AppBar(
@@ -129,7 +82,7 @@ class _DetailPageState extends State<DetailPage> {
                         leading: Icon(Icons.person),
                         title: const Center(child: Text('Nama Pelapor')),
                         subtitle: Center(
-                          child: Text(nama),
+                          child: Text(laporan.nama!),
                         ),
                         trailing: SizedBox(width: 45),
                       ),
@@ -158,7 +111,7 @@ class _DetailPageState extends State<DetailPage> {
                         child: Text(laporan.deskripsi!),
                       ),
                       SizedBox(height: 50),
-                      if (akun!.role == 'admin')
+                      if (akun.role == 'admin')
                         Container(
                           width: 250,
                           child: ElevatedButton(
@@ -196,7 +149,7 @@ class _DetailPageState extends State<DetailPage> {
                       SizedBox(
                         height: 800,
                         child: ListView.builder(
-                            itemCount: 2,
+                            itemCount: laporan.komentar!.length,
                             itemBuilder: (context, index) {
                               return Container(
                                 padding: EdgeInsets.all(10),
@@ -209,13 +162,13 @@ class _DetailPageState extends State<DetailPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Nama Komentar',
+                                      laporan.komentar![index].nama,
                                       style: const TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Text(
-                                      'Komentar',
+                                      laporan.komentar![index].isi,
                                       style: const TextStyle(
                                         color: Colors.white,
                                       ),

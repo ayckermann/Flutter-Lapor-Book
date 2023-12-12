@@ -3,7 +3,7 @@ class Akun {
   final String docId;
 
   final String nama;
-  final int noHP;
+  final String noHP;
   final String email;
   final String role;
 

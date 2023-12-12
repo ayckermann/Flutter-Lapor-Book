@@ -6,6 +6,7 @@ class Laporan {
   final String instansi;
   String? deskripsi;
   String? gambar;
+  final String nama;
   final String status;
   final DateTime tanggal;
   final String maps;
@@ -18,6 +19,7 @@ class Laporan {
     required this.instansi,
     this.deskripsi,
     this.gambar,
+    required this.nama,
     required this.status,
     required this.tanggal,
     required this.maps,
