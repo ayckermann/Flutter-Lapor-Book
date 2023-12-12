@@ -149,7 +149,7 @@ class _DetailPageState extends State<DetailPage> {
                       SizedBox(
                         height: 800,
                         child: ListView.builder(
-                            itemCount: laporan.komentar!.length,
+                            itemCount: laporan.komentar?.length ?? 0,
                             itemBuilder: (context, index) {
                               return Container(
                                 padding: EdgeInsets.all(10),

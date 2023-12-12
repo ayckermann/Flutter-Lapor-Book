@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lapor_book/components/styles.dart';
+import 'package:flutter_lapor_book/models/akun.dart';
 import 'package:flutter_lapor_book/pages/dashboard/AllLaporan.dart';
 import 'package:flutter_lapor_book/pages/dashboard/MyLaporan.dart';
 import 'package:flutter_lapor_book/pages/dashboard/ProfilePage.dart';
@@ -23,6 +26,11 @@ class DashboardFull extends StatefulWidget {
 class _DashboardFull extends State<DashboardFull> {
   int _selectedIndex = 0;
 
+  final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
+
+  bool _isLoading = false;
+
   List<Widget> pages = <Widget>[
     AllLaporan(),
     MyLaporan(),
@@ -35,6 +43,51 @@ class _DashboardFull extends State<DashboardFull> {
     });
   }
 
+  Akun? akun;
+
+  void getAkun() async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
+          .collection('akun')
+          .where('uid', isEqualTo: _auth.currentUser!.uid)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        var userData = querySnapshot.docs.first.data() as Map<String, dynamic>;
+
+        setState(() {
+          akun = Akun(
+            uid: userData['uid'],
+            nama: userData['nama'],
+            noHP: userData['noHP'],
+            email: userData['email'],
+            docId: userData['docId'],
+            role: userData['role'],
+          );
+        });
+      }
+    } catch (e) {
+      final snackbar = SnackBar(content: Text(e.toString()));
+      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+      print(e);
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getAkun();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +95,9 @@ class _DashboardFull extends State<DashboardFull> {
         backgroundColor: primaryColor,
         child: Icon(Icons.add, size: 35),
         onPressed: () {
-          Navigator.pushNamed(context, '/add');
+          Navigator.pushNamed(context, '/add', arguments: {
+            'akun': akun!,
+          });
         },
       ),
       appBar: AppBar(
