@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "134236590361",
+    "project_id": "lapor-book-9db05",
+    "storage_bucket": "lapor-book-9db05.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:134236590361:android:26429723890c24f161b588",
+        "android_client_info": {
+          "package_name": "com.example.flutter_keuangan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDb6_8Q68N_wTABnxODRkFmgwQnuy_bs7c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
