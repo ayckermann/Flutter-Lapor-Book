@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_lapor_book/components/styles.dart';
 import 'package:flutter_lapor_book/components/vars.dart';
 import 'package:flutter_lapor_book/models/akun.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../components/input_widget.dart';
@@ -30,6 +31,41 @@ class AddFormState extends State<AddFormPage> {
 
   ImagePicker picker = ImagePicker();
   XFile? file;
+
+  Future<Position> getCurrentLocation() async {
+    bool isServiceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!isServiceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permantly denied, we cannot request permissions.');
+    }
+
+    return await Geolocator.getCurrentPosition();
+  }
+
+  // void liveLocation() {
+  //   LocationSettings _locationSettings = LocationSettings(
+  //     accuracy: LocationAccuracy.high,
+  //     distanceFilter: 10,
+  //   );
+
+  //   Geolocator.getPositionStream(locationSettings: _locationSettings)
+  //       .listen((event) {
+  //     print(event);
+  //   });
+  // }
 
   Future<String> uploadImage() async {
     if (file == null) return '';
@@ -61,6 +97,11 @@ class AddFormState extends State<AddFormPage> {
 
       String url = await uploadImage();
 
+      String currentLocation = await getCurrentLocation().then((value) {
+        return '${value.latitude},${value.longitude}';
+      });
+
+      String maps = 'https://www.google.com/maps/place/$currentLocation';
       final id = laporanCollection.doc().id;
 
       await laporanCollection.doc(id).set({
@@ -73,7 +114,7 @@ class AddFormState extends State<AddFormPage> {
         'nama': akun.nama,
         'status': 'Posted', // posted, process, done
         'tanggal': timestamp,
-        'maps': '',
+        'maps': maps,
       }).catchError((e) {
         throw e;
       });
@@ -109,7 +150,7 @@ class AddFormState extends State<AddFormPage> {
             : SingleChildScrollView(
                 child: Form(
                   child: Container(
-                    margin: EdgeInsets.only(top: 70, left: 40, right: 40),
+                    margin: EdgeInsets.all(40),
                     child: Column(
                       children: [
                         InputLayout(

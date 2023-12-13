@@ -5,6 +5,8 @@ import 'package:flutter_lapor_book/components/styles.dart';
 import 'package:flutter_lapor_book/models/akun.dart';
 
 class Profile extends StatefulWidget {
+  Akun akun;
+  Profile({super.key, required this.akun});
   @override
   State<Profile> createState() => _ProfileState();
 }
@@ -14,44 +16,6 @@ class _ProfileState extends State<Profile> {
   final _firestore = FirebaseFirestore.instance;
 
   bool _isLoading = false;
-
-  Akun? akun;
-
-  void getAkun() async {
-    setState(() {
-      _isLoading = true;
-    });
-    try {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
-          .collection('akun')
-          .where('uid', isEqualTo: _auth.currentUser!.uid)
-          .limit(1)
-          .get();
-
-      if (querySnapshot.docs.isNotEmpty) {
-        var userData = querySnapshot.docs.first.data() as Map<String, dynamic>;
-
-        setState(() {
-          akun = Akun(
-            uid: userData['uid'],
-            nama: userData['nama'],
-            noHP: userData['noHP'],
-            email: userData['email'],
-            docId: userData['docId'],
-            role: userData['role'],
-          );
-        });
-      }
-    } catch (e) {
-      final snackbar = SnackBar(content: Text(e.toString()));
-      ScaffoldMessenger.of(context).showSnackBar(snackbar);
-      print(e);
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
 
   void keluar(BuildContext context) async {
     await _auth.signOut();
@@ -71,7 +35,7 @@ class _ProfileState extends State<Profile> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getAkun();
+   
   }
 
   @override
@@ -90,28 +54,28 @@ class _ProfileState extends State<Profile> {
                     height: 100,
                   ),
                   Text(
-                    akun!.nama,
+                    widget.akun.nama,
                     style: TextStyle(
                         color: primaryColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 30),
                   ),
                   Text(
-                    akun!.noHP,
+                    widget.akun.noHP,
                     style: TextStyle(
                         color: primaryColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 12),
                   ),
                   Text(
-                    akun!.email,
+                    widget.akun.email,
                     style: TextStyle(
                         color: primaryColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 12),
                   ),
                   Text(
-                    akun!.role,
+                    widget.akun.role,
                     style: TextStyle(
                         color: primaryColor,
                         fontWeight: FontWeight.bold,

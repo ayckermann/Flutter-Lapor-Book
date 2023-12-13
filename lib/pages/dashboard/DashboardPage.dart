@@ -31,19 +31,14 @@ class _DashboardFull extends State<DashboardFull> {
 
   bool _isLoading = false;
 
-  List<Widget> pages = <Widget>[
-    AllLaporan(),
-    MyLaporan(),
-    Profile(),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  Akun? akun;
+  Akun akun = Akun(
+    uid: '',
+    docId: '',
+    nama: '',
+    noHP: '',
+    email: '',
+    role: '',
+  );
 
   void getAkun() async {
     setState(() {
@@ -81,6 +76,12 @@ class _DashboardFull extends State<DashboardFull> {
     }
   }
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -90,6 +91,12 @@ class _DashboardFull extends State<DashboardFull> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> pages = <Widget>[
+      AllLaporan(akun: akun),
+      MyLaporan(akun: akun),
+      Profile(akun: akun),
+    ];
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
@@ -130,7 +137,11 @@ class _DashboardFull extends State<DashboardFull> {
           ),
         ],
       ),
-      body: pages.elementAt(_selectedIndex),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : pages.elementAt(_selectedIndex),
     );
   }
 }

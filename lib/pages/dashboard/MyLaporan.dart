@@ -6,7 +6,8 @@ import 'package:flutter_lapor_book/models/akun.dart';
 import 'package:flutter_lapor_book/models/laporan.dart';
 
 class MyLaporan extends StatefulWidget {
-  const MyLaporan({super.key});
+  Akun akun;
+  MyLaporan({super.key, required this.akun});
 
   @override
   State<MyLaporan> createState() => _MyLaporanState();
@@ -18,43 +19,6 @@ class _MyLaporanState extends State<MyLaporan> {
 
   bool _isLoading = false;
   List<Laporan> listLaporan = [];
-  Akun? akun;
-
-  void getAkun() async {
-    setState(() {
-      _isLoading = true;
-    });
-    try {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
-          .collection('akun')
-          .where('uid', isEqualTo: _auth.currentUser!.uid)
-          .limit(1)
-          .get();
-
-      if (querySnapshot.docs.isNotEmpty) {
-        var userData = querySnapshot.docs.first.data() as Map<String, dynamic>;
-
-        setState(() {
-          akun = Akun(
-            uid: userData['uid'],
-            nama: userData['nama'],
-            noHP: userData['noHP'],
-            email: userData['email'],
-            docId: userData['docId'],
-            role: userData['role'],
-          );
-        });
-      }
-    } catch (e) {
-      final snackbar = SnackBar(content: Text(e.toString()));
-      ScaffoldMessenger.of(context).showSnackBar(snackbar);
-      print(e);
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
 
   void getTransaksi() async {
     setState(() {
@@ -108,7 +72,7 @@ class _MyLaporanState extends State<MyLaporan> {
   @override
   void initState() {
     super.initState();
-    getAkun();
+
     getTransaksi();
   }
 
@@ -133,7 +97,7 @@ class _MyLaporanState extends State<MyLaporan> {
                   itemBuilder: (context, index) {
                     return ListItem(
                       laporan: listLaporan[index],
-                      akun: akun!,
+                      akun: widget.akun,
                     );
                   }),
             ),

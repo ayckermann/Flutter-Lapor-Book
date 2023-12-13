@@ -1,60 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lapor_book/components/list_item.dart';
 import 'package:flutter_lapor_book/models/akun.dart';
 import 'package:flutter_lapor_book/models/laporan.dart';
 
 class AllLaporan extends StatefulWidget {
-  const AllLaporan({super.key});
+  Akun akun;
+  AllLaporan({super.key, required this.akun});
 
   @override
   State<AllLaporan> createState() => _AllLaporanState();
 }
 
 class _AllLaporanState extends State<AllLaporan> {
-  final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
 
   bool _isLoading = false;
   List<Laporan> listLaporan = [];
-  Akun? akun;
-
-  void getAkun() async {
-    setState(() {
-      _isLoading = true;
-    });
-    try {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
-          .collection('akun')
-          .where('uid', isEqualTo: _auth.currentUser!.uid)
-          .limit(1)
-          .get();
-
-      if (querySnapshot.docs.isNotEmpty) {
-        var userData = querySnapshot.docs.first.data() as Map<String, dynamic>;
-
-        setState(() {
-          akun = Akun(
-            uid: userData['uid'],
-            nama: userData['nama'],
-            noHP: userData['noHP'],
-            email: userData['email'],
-            docId: userData['docId'],
-            role: userData['role'],
-          );
-        });
-      }
-    } catch (e) {
-      final snackbar = SnackBar(content: Text(e.toString()));
-      ScaffoldMessenger.of(context).showSnackBar(snackbar);
-      print(e);
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
 
   void getTransaksi() async {
     setState(() {
@@ -107,7 +69,7 @@ class _AllLaporanState extends State<AllLaporan> {
   @override
   void initState() {
     super.initState();
-    getAkun();
+
     getTransaksi();
   }
 
@@ -132,7 +94,7 @@ class _AllLaporanState extends State<AllLaporan> {
                   itemBuilder: (context, index) {
                     return ListItem(
                       laporan: listLaporan[index],
-                      akun: akun!,
+                      akun: widget.akun,
                     );
                   }),
             ),
