@@ -98,6 +98,7 @@ class _MyLaporanState extends State<MyLaporan> {
                     return ListItem(
                       laporan: listLaporan[index],
                       akun: widget.akun,
+                      isLaporanku: true,
                     );
                   }),
             ),

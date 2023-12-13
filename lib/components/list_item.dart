@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lapor_book/models/akun.dart';
 import 'package:intl/intl.dart';
@@ -5,15 +7,36 @@ import 'package:flutter_lapor_book/components/styles.dart';
 import 'package:flutter_lapor_book/models/laporan.dart';
 
 class ListItem extends StatefulWidget {
-  Laporan laporan;
-  Akun akun;
-  ListItem({super.key, required this.laporan, required this.akun});
+  final Laporan laporan;
+  final Akun akun;
+  final bool isLaporanku;
+  ListItem(
+      {super.key,
+      required this.laporan,
+      required this.akun,
+      required this.isLaporanku});
 
   @override
   State<ListItem> createState() => _ListItemState();
 }
 
 class _ListItemState extends State<ListItem> {
+  final _firestore = FirebaseFirestore.instance;
+  final _storage = FirebaseStorage.instance;
+
+  void deleteLaporan() async {
+    try {
+      await _firestore.collection('laporan').doc(widget.laporan.docId).delete();
+
+      if (widget.laporan.gambar != '') {
+        await _storage.refFromURL(widget.laporan.gambar!).delete();
+      }
+      Navigator.popAndPushNamed(context, '/dashboard');
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,6 +49,31 @@ class _ListItemState extends State<ListItem> {
             'laporan': widget.laporan,
             'akun': widget.akun,
           });
+        },
+        onLongPress: () {
+          if (widget.isLaporanku) {
+            showDialog(
+                context: context,
+                builder: (BuildContext) {
+                  return AlertDialog(
+                    title: Text('Delete ${widget.laporan.judul}?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('Batal'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          deleteLaporan();
+                        },
+                        child: Text('Hapus'),
+                      ),
+                    ],
+                  );
+                });
+          }
         },
         child: Column(
           children: [

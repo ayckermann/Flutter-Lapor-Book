@@ -137,7 +137,7 @@ class _DetailPageState extends State<DetailPage> {
                       Container(
                         width: double.infinity,
                         margin: EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(laporan.deskripsi!),
+                        child: Text(laporan.deskripsi ?? ''),
                       ),
                       SizedBox(height: 50),
                       if (akun.role == 'admin')
