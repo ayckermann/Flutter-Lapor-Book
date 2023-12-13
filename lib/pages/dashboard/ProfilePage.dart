@@ -23,19 +23,10 @@ class _ProfileState extends State<Profile> {
         context, '/login', ModalRoute.withName('/login'));
   }
 
-  void gantiPassword() {
-    print('GANTI PASSWORD');
-  }
-
-  void editProfile() {
-    print('Profile Teredit');
-  }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-   
   }
 
   @override
@@ -58,86 +49,70 @@ class _ProfileState extends State<Profile> {
                     style: TextStyle(
                         color: primaryColor,
                         fontWeight: FontWeight.bold,
-                        fontSize: 30),
-                  ),
-                  Text(
-                    widget.akun.noHP,
-                    style: TextStyle(
-                        color: primaryColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12),
-                  ),
-                  Text(
-                    widget.akun.email,
-                    style: TextStyle(
-                        color: primaryColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12),
+                        fontSize: 40),
                   ),
                   Text(
                     widget.akun.role,
                     style: TextStyle(
                         color: primaryColor,
                         fontWeight: FontWeight.bold,
-                        fontSize: 12),
+                        fontSize: 20),
                   ),
                   SizedBox(
-                    height: 100,
+                    height: 40,
                   ),
-                  listContainer(
-                    icon: Icons.person_outline,
-                    kategori: 'Edit Profile',
-                    pencet: editProfile,
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(color: primaryColor),
+                      ), // Sudut border
+                    ),
+                    child: Text(
+                      widget.akun.noHP,
+                      style: TextStyle(
+                          color: primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(color: primaryColor),
+                      ), // Sudut border
+                    ),
+                    child: Text(
+                      widget.akun.email,
+                      style: TextStyle(
+                          color: primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
+                    ),
                   ),
                   SizedBox(
                     height: 35,
                   ),
-                  listContainer(
-                      icon: Icons.lock_outline,
-                      kategori: 'Ubah Password',
-                      pencet: gantiPassword),
+                  Container(
+                    width: double.infinity,
+                    child: FilledButton(
+                      style: buttonStyle,
+                      onPressed: () {
+                        keluar(context);
+                      },
+                      child: Text('Logout',
+                          style: TextStyle(color: Colors.white, fontSize: 20)),
+                    ),
+                  ),
                   SizedBox(
                     height: 35,
-                  ),
-                  listContainer(
-                    icon: Icons.logout,
-                    kategori: 'Logout',
-                    pencet: (() => keluar(context)),
                   ),
                 ],
               ),
             ),
-    );
-  }
-
-  Container listContainer({var icon, var kategori, required Function pencet}) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: primaryColor, // Warna border
-          width: 2.0, // Lebar border
-        ),
-        borderRadius: BorderRadius.circular(15), // Sudut border
-      ),
-      child: ListTile(
-        leading: Icon(
-          icon,
-          color: primaryColor,
-          size: 30,
-        ),
-        title: Text(
-          kategori,
-          style: TextStyle(
-              color: primaryColor, fontWeight: FontWeight.bold, fontSize: 18),
-        ),
-        onTap: () {
-          pencet();
-        },
-        trailing: Icon(
-          Icons.arrow_forward_ios,
-          color: primaryColor,
-        ),
-      ),
     );
   }
 }
