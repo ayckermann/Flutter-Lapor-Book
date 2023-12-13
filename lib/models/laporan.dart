@@ -36,3 +36,7 @@ class Komentar {
     required this.isi,
   });
 }
+
+enum Status { Posted, Process, Done }
+
+enum Fruit { apple, banana }

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_lapor_book/components/komen_dialog.dart';
+import 'package:flutter_lapor_book/components/status_dialog.dart';
 import 'package:flutter_lapor_book/components/styles.dart';
 import 'package:flutter_lapor_book/models/akun.dart';
 import 'package:flutter_lapor_book/models/laporan.dart';
@@ -18,11 +20,42 @@ class _DetailPageState extends State<DetailPage> {
 
   bool _isLoading = false;
 
+  String? status;
+
   Future launch(String uri) async {
     if (uri == '') return;
     if (!await launchUrl(Uri.parse(uri))) {
       throw Exception('Tidak dapat memanggil : $uri');
     }
+  }
+
+  void statusDialog(Laporan laporan) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatusDialog(
+          status: status!,
+          laporan: laporan,
+          onValueChanged: (value) {
+            setState(() {
+              status = value;
+            });
+          },
+        );
+      },
+    );
+  }
+
+  void komentarDialog(Akun akun, Laporan laporan) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return KomenDialog(
+          laporan: laporan,
+          akun: akun,
+        );
+      },
+    );
   }
 
   @override
@@ -82,7 +115,7 @@ class _DetailPageState extends State<DetailPage> {
                         leading: Icon(Icons.person),
                         title: const Center(child: Text('Nama Pelapor')),
                         subtitle: Center(
-                          child: Text(laporan.nama!),
+                          child: Text(laporan.nama),
                         ),
                         trailing: SizedBox(width: 45),
                       ),
@@ -115,7 +148,12 @@ class _DetailPageState extends State<DetailPage> {
                         Container(
                           width: 250,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              setState(() {
+                                status = laporan.status;
+                              });
+                              statusDialog(laporan);
+                            },
                             style: TextButton.styleFrom(
                               foregroundColor: Colors.white,
                               backgroundColor: primaryColor,
@@ -129,7 +167,9 @@ class _DetailPageState extends State<DetailPage> {
                       Container(
                         width: 250,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            komentarDialog(akun, laporan);
+                          },
                           style: TextButton.styleFrom(
                             foregroundColor: Colors.white,
                             backgroundColor: primaryColor,
@@ -146,8 +186,8 @@ class _DetailPageState extends State<DetailPage> {
                         style: header3,
                       ),
                       SizedBox(height: 20),
-                      SizedBox(
-                        height: 800,
+                      Container(
+                        constraints: const BoxConstraints(maxHeight: 400),
                         child: ListView.builder(
                             itemCount: laporan.komentar?.length ?? 0,
                             itemBuilder: (context, index) {
