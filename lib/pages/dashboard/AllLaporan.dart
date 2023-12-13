@@ -5,7 +5,7 @@ import 'package:flutter_lapor_book/models/akun.dart';
 import 'package:flutter_lapor_book/models/laporan.dart';
 
 class AllLaporan extends StatefulWidget {
-  Akun akun;
+  final Akun akun;
   AllLaporan({super.key, required this.akun});
 
   @override

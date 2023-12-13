@@ -1,11 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lapor_book/components/styles.dart';
 import 'package:flutter_lapor_book/models/akun.dart';
 
 class Profile extends StatefulWidget {
-  Akun akun;
+  final Akun akun;
   Profile({super.key, required this.akun});
   @override
   State<Profile> createState() => _ProfileState();
@@ -13,7 +12,6 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   final _auth = FirebaseAuth.instance;
-  final _firestore = FirebaseFirestore.instance;
 
   bool _isLoading = false;
 

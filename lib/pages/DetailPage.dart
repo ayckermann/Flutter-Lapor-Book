@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lapor_book/components/komen_dialog.dart';
 import 'package:flutter_lapor_book/components/status_dialog.dart';
@@ -16,8 +14,6 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-  final _firestore = FirebaseFirestore.instance;
-
   bool _isLoading = false;
 
   String? status;

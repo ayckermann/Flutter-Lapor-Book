@@ -103,7 +103,7 @@ class _DashboardFull extends State<DashboardFull> {
         child: Icon(Icons.add, size: 35),
         onPressed: () {
           Navigator.pushNamed(context, '/add', arguments: {
-            'akun': akun!,
+            'akun': akun,
           });
         },
       ),
