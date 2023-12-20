@@ -7,7 +7,7 @@ import 'package:flutter_lapor_book/models/laporan.dart';
 
 class MyLaporan extends StatefulWidget {
   final Akun akun;
-  MyLaporan({super.key, required this.akun});
+  const MyLaporan({super.key, required this.akun});
 
   @override
   State<MyLaporan> createState() => _MyLaporanState();
@@ -17,13 +17,9 @@ class _MyLaporanState extends State<MyLaporan> {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
 
-  bool _isLoading = false;
   List<Laporan> listLaporan = [];
 
   void getTransaksi() async {
-    setState(() {
-      _isLoading = true;
-    });
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
           .collection('laporan')
@@ -59,49 +55,33 @@ class _MyLaporanState extends State<MyLaporan> {
         }
       });
     } catch (e) {
-      final snackbar = SnackBar(content: Text(e.toString()));
-      ScaffoldMessenger.of(context).showSnackBar(snackbar);
       print(e);
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
   @override
-  void initState() {
-    super.initState();
-
-    getTransaksi();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    getTransaksi();
     return SafeArea(
-      child: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : Container(
-              width: double.infinity,
-              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 1 / 1.234,
-                  ),
-                  itemCount: listLaporan.length,
-                  itemBuilder: (context, index) {
-                    return ListItem(
-                      laporan: listLaporan[index],
-                      akun: widget.akun,
-                      isLaporanku: true,
-                    );
-                  }),
+      child: Container(
+        width: double.infinity,
+        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              childAspectRatio: 1 / 1.234,
             ),
+            itemCount: listLaporan.length,
+            itemBuilder: (context, index) {
+              return ListItem(
+                laporan: listLaporan[index],
+                akun: widget.akun,
+                isLaporanku: true,
+              );
+            }),
+      ),
     );
   }
 }

@@ -5,15 +5,13 @@ import 'package:flutter_lapor_book/models/akun.dart';
 
 class Profile extends StatefulWidget {
   final Akun akun;
-  Profile({super.key, required this.akun});
+  const Profile({super.key, required this.akun});
   @override
   State<Profile> createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
   final _auth = FirebaseAuth.instance;
-
-  bool _isLoading = false;
 
   void keluar(BuildContext context) async {
     await _auth.signOut();
@@ -22,95 +20,85 @@ class _ProfileState extends State<Profile> {
   }
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : Container(
+      child: Container(
+        width: double.infinity,
+        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 100,
+            ),
+            Text(
+              widget.akun.nama,
+              style: TextStyle(
+                  color: primaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 40),
+            ),
+            Text(
+              widget.akun.role,
+              style: TextStyle(
+                  color: primaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20),
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            Container(
               width: double.infinity,
-              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 100,
-                  ),
-                  Text(
-                    widget.akun.nama,
-                    style: TextStyle(
-                        color: primaryColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 40),
-                  ),
-                  Text(
-                    widget.akun.role,
-                    style: TextStyle(
-                        color: primaryColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20),
-                  ),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(color: primaryColor),
-                      ), // Sudut border
-                    ),
-                    child: Text(
-                      widget.akun.noHP,
-                      style: TextStyle(
-                          color: primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(color: primaryColor),
-                      ), // Sudut border
-                    ),
-                    child: Text(
-                      widget.akun.email,
-                      style: TextStyle(
-                          color: primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 35,
-                  ),
-                  Container(
-                    width: double.infinity,
-                    child: FilledButton(
-                      style: buttonStyle,
-                      onPressed: () {
-                        keluar(context);
-                      },
-                      child: Text('Logout',
-                          style: TextStyle(color: Colors.white, fontSize: 20)),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 35,
-                  ),
-                ],
+              padding: EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: primaryColor),
+                ), // Sudut border
+              ),
+              child: Text(
+                widget.akun.noHP,
+                style: TextStyle(
+                    color: primaryColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
               ),
             ),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: primaryColor),
+                ), // Sudut border
+              ),
+              child: Text(
+                widget.akun.email,
+                style: TextStyle(
+                    color: primaryColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
+            ),
+            SizedBox(
+              height: 35,
+            ),
+            Container(
+              width: double.infinity,
+              child: FilledButton(
+                style: buttonStyle,
+                onPressed: () {
+                  keluar(context);
+                },
+                child: Text('Logout',
+                    style: TextStyle(color: Colors.white, fontSize: 20)),
+              ),
+            ),
+            SizedBox(
+              height: 35,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
