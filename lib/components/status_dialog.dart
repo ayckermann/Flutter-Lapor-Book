@@ -4,14 +4,9 @@ import 'package:flutter_lapor_book/components/styles.dart';
 import 'package:flutter_lapor_book/models/laporan.dart';
 
 class StatusDialog extends StatefulWidget {
-  final String status;
-
-  final ValueChanged<String> onValueChanged;
   final Laporan laporan;
 
   const StatusDialog({
-    required this.status,
-    required this.onValueChanged,
     required this.laporan,
   });
 
@@ -25,9 +20,6 @@ class _StatusDialogState extends State<StatusDialog> {
 
   void updateStatus() async {
     CollectionReference transaksiCollection = _firestore.collection('laporan');
-
-    // Convert DateTime to Firestore Timestamp
-
     try {
       await transaksiCollection.doc(widget.laporan.docId).update({
         'status': status,
@@ -41,7 +33,7 @@ class _StatusDialogState extends State<StatusDialog> {
   @override
   void initState() {
     super.initState();
-    status = widget.status;
+    status = widget.laporan.status;
   }
 
   @override
