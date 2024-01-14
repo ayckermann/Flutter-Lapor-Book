@@ -60,7 +60,7 @@ class LoginPageState extends State<LoginPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(height: 80),
-                    Text('Login', style: header1),
+                    Text('Login', style: headerStyle(level: 3)),
                     Container(
                       child: const Text(
                         'Login to your account',

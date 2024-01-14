@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lapor_book/components/styles.dart';
+import 'package:flutter_lapor_book/components/vars.dart';
 import 'package:flutter_lapor_book/models/laporan.dart';
 
 class StatusDialog extends StatefulWidget {
@@ -19,9 +20,9 @@ class _StatusDialogState extends State<StatusDialog> {
   final _firestore = FirebaseFirestore.instance;
 
   void updateStatus() async {
-    CollectionReference transaksiCollection = _firestore.collection('laporan');
+    CollectionReference laporanCollection = _firestore.collection('laporan');
     try {
-      await transaksiCollection.doc(widget.laporan.docId).update({
+      await laporanCollection.doc(widget.laporan.docId).update({
         'status': status,
       });
       Navigator.popAndPushNamed(context, '/dashboard');
@@ -56,8 +57,8 @@ class _StatusDialogState extends State<StatusDialog> {
             ),
             SizedBox(height: 20),
             RadioListTile<String>(
-              title: const Text('Posted'),
-              value: 'Posted',
+              title: Text(dataStatus[0]),
+              value: dataStatus[0],
               groupValue: status,
               onChanged: (value) {
                 setState(() {
@@ -66,8 +67,8 @@ class _StatusDialogState extends State<StatusDialog> {
               },
             ),
             RadioListTile<String>(
-              title: const Text('Process'),
-              value: 'Process',
+              title: Text(dataStatus[1]),
+              value: dataStatus[1],
               groupValue: status,
               onChanged: (value) {
                 setState(() {
@@ -76,8 +77,8 @@ class _StatusDialogState extends State<StatusDialog> {
               },
             ),
             RadioListTile<String>(
-              title: const Text('Done'),
-              value: 'Done',
+              title: Text(dataStatus[2]),
+              value: dataStatus[2],
               groupValue: status,
               onChanged: (value) {
                 setState(() {

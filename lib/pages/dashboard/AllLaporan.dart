@@ -17,7 +17,7 @@ class _AllLaporanState extends State<AllLaporan> {
 
   List<Laporan> listLaporan = [];
 
-  void getTransaksi() async {
+  void getLaporan() async {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await _firestore.collection('laporan').get();
@@ -34,6 +34,10 @@ class _AllLaporanState extends State<AllLaporan> {
             );
           }).toList();
 
+          List<dynamic>? likeData = documents.data()['like'];
+          List<String>? listLike =
+              likeData?.map((map) => map.toString()).toList();
+
           listLaporan.add(
             Laporan(
               uid: documents.data()['uid'],
@@ -47,6 +51,7 @@ class _AllLaporanState extends State<AllLaporan> {
               tanggal: documents['tanggal'].toDate(),
               maps: documents.data()['maps'],
               komentar: listKomentar,
+              like: listLike,
             ),
           );
         }
@@ -57,8 +62,15 @@ class _AllLaporanState extends State<AllLaporan> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getLaporan();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    getTransaksi();
+    getLaporan();
     return SafeArea(
       child: Container(
         width: double.infinity,
@@ -68,7 +80,7 @@ class _AllLaporanState extends State<AllLaporan> {
               crossAxisCount: 2,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
-              childAspectRatio: 1 / 1.234,
+              childAspectRatio: 1 / 1.233,
             ),
             itemCount: listLaporan.length,
             itemBuilder: (context, index) {

@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lapor_book/components/komen_dialog.dart';
 import 'package:flutter_lapor_book/components/status_dialog.dart';
 import 'package:flutter_lapor_book/components/styles.dart';
+import 'package:flutter_lapor_book/components/vars.dart';
 import 'package:flutter_lapor_book/models/akun.dart';
 import 'package:flutter_lapor_book/models/laporan.dart';
 import 'package:intl/intl.dart';
@@ -14,6 +17,8 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
+  final _firestore = FirebaseFirestore.instance;
+
   bool _isLoading = false;
 
   String? status;
@@ -22,6 +27,42 @@ class _DetailPageState extends State<DetailPage> {
     if (uri == '') return;
     if (!await launchUrl(Uri.parse(uri))) {
       throw Exception('Tidak dapat memanggil : $uri');
+    }
+  }
+
+  int totalLike(Laporan laporan) {
+    return laporan.like?.length ?? 0;
+  }
+
+  bool isLike(Laporan laporan, Akun akun) {
+    if (laporan.like == null) return false;
+    if (laporan.like!.contains(akun.uid)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void like(Laporan laporan, Akun akun) async {
+    CollectionReference laporanCollection = _firestore.collection('laporan');
+    try {
+      if (!isLike(laporan, akun)) {
+        await laporanCollection.doc(laporan.docId).update({
+          'like': FieldValue.arrayUnion([akun.uid]),
+        });
+      } else {
+        List<String> listLike = laporan.like ?? [];
+
+        listLike.remove(akun.uid);
+
+        await laporanCollection.doc(laporan.docId).update({
+          'like': listLike,
+        });
+      }
+
+      Navigator.popAndPushNamed(context, '/dashboard');
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -78,24 +119,22 @@ class _DetailPageState extends State<DetailPage> {
                     children: [
                       Text(
                         laporan.judul,
-                        style: header3,
+                        style: headerStyle(level: 3),
                       ),
                       SizedBox(height: 15),
-                      laporan.gambar != ''
-                          ? Image.network(laporan.gambar!)
-                          : Image.asset('assets/istock-default.jpg'),
+                      imageAndLike(laporan, akun),
                       SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          laporan.status == 'Posted'
-                              ? textStatus(
-                                  'Posted', Colors.yellow, Colors.black)
-                              : laporan.status == 'Process'
-                                  ? textStatus(
-                                      'Process', Colors.green, Colors.white)
-                                  : textStatus(
-                                      'Done', Colors.blue, Colors.white),
+                          textStatus(
+                              laporan.status,
+                              laporan.status == dataStatus[0]
+                                  ? warnaStatus[0]
+                                  : laporan.status == dataStatus[1]
+                                      ? warnaStatus[1]
+                                      : warnaStatus[2],
+                              Colors.white),
                           textStatus(
                               laporan.instansi, Colors.white, Colors.black),
                         ],
@@ -125,7 +164,7 @@ class _DetailPageState extends State<DetailPage> {
                       SizedBox(height: 50),
                       Text(
                         'Deskripsi Laporan',
-                        style: header3,
+                        style: headerStyle(level: 3),
                       ),
                       SizedBox(height: 20),
                       Container(
@@ -173,7 +212,7 @@ class _DetailPageState extends State<DetailPage> {
                       SizedBox(height: 20),
                       Text(
                         'List Komentar',
-                        style: header3,
+                        style: headerStyle(level: 3),
                       ),
                       SizedBox(height: 20),
                       Container(
@@ -213,6 +252,59 @@ class _DetailPageState extends State<DetailPage> {
                 ),
               ),
       ),
+    );
+  }
+
+  Stack imageAndLike(Laporan laporan, Akun akun) {
+    return Stack(
+      alignment: Alignment.bottomRight,
+      children: [
+        Container(
+          alignment: Alignment.center,
+          padding: EdgeInsets.all(5),
+          child: laporan.gambar != ''
+              ? Image.network(laporan.gambar!)
+              : Image.asset('assets/istock-default.jpg'),
+        ),
+        Container(
+          alignment: Alignment.bottomRight,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                margin: EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                    color: primaryColor,
+                    borderRadius: BorderRadius.circular(25)),
+                child: Row(
+                  children: [
+                    IconButton(
+                        iconSize: 20,
+                        color: Colors.black,
+                        isSelected: isLike(laporan, akun),
+                        onPressed: () {
+                          like(laporan, akun);
+                        },
+                        selectedIcon: const Icon(
+                          Icons.favorite,
+                        ),
+                        icon: const Icon(
+                          Icons.favorite_outline,
+                        )),
+                    Text(
+                      totalLike(laporan).toString(),
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 

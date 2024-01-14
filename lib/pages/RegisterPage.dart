@@ -76,7 +76,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(height: 80),
-                    Text('Register', style: header1),
+                    Text('Register', style: headerStyle(level: 1)),
                     Container(
                       child: const Text(
                         'Create your profile to start your journey',
@@ -137,7 +137,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                 width: double.infinity,
                                 child: FilledButton(
                                     style: buttonStyle,
-                                    child: Text('Register', style: header2),
+                                    child: Text('Register',
+                                        style: headerStyle(level: 2)),
                                     onPressed: () {
                                       if (_formKey.currentState!.validate()) {
                                         register();

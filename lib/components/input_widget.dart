@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'styles.dart';
 
 class InputLayout extends StatelessWidget {
-  String label;
-  StatefulWidget inputField;
+  final String label;
+  final StatefulWidget inputField;
 
-  InputLayout(
+  const InputLayout(
     this.label,
     this.inputField, {
     super.key,

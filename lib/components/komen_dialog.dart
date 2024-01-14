@@ -24,13 +24,13 @@ class _KomenDialogState extends State<KomenDialog> {
   TextEditingController _komenController = TextEditingController();
 
   void addKomentar() async {
-    CollectionReference transaksiCollection = _firestore.collection('laporan');
+    CollectionReference laporanCollection = _firestore.collection('laporan');
 
     // Convert DateTime to Firestore Timestamp
 
     try {
       if (_komenController.text != '') {
-        await transaksiCollection.doc(widget.laporan.docId).update({
+        await laporanCollection.doc(widget.laporan.docId).update({
           'komentar': FieldValue.arrayUnion([
             {
               'nama': widget.akun.nama,

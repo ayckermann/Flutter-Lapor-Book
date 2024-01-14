@@ -31,24 +31,15 @@ class _DashboardFull extends State<DashboardFull> {
 
   bool _isLoading = false;
 
-  Akun akun = Akun(
-    uid: '',
-    docId: '',
-    nama: '',
-    noHP: '',
-    email: '',
-    role: '',
-  );
+  Akun akun = Akun(uid: '', docId: '', nama: '', noHP: '', email: '', role: '');
+
+  List<Widget> pages = [];
 
   void getAkun() async {
-    setState(() {
-      _isLoading = true;
-    });
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
           .collection('akun')
           .where('uid', isEqualTo: _auth.currentUser!.uid)
-          .limit(1)
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
@@ -66,37 +57,18 @@ class _DashboardFull extends State<DashboardFull> {
         });
       }
     } catch (e) {
-      final snackbar = SnackBar(content: Text(e.toString()));
-      ScaffoldMessenger.of(context).showSnackBar(snackbar);
       print(e);
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
     }
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getAkun();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> pages = <Widget>[
+    getAkun();
+    pages = <Widget>[
       AllLaporan(akun: akun),
       MyLaporan(akun: akun),
       Profile(akun: akun),
     ];
-
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
@@ -109,13 +81,17 @@ class _DashboardFull extends State<DashboardFull> {
       ),
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: Text('Lapor Book', style: header2),
+        title: Text('Lapor Book', style: headerStyle(level: 2)),
         centerTitle: true,
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: primaryColor,
         currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+        onTap: (value) {
+          setState(() {
+            _selectedIndex = value;
+          });
+        },
         selectedItemColor: Colors.white,
         selectedFontSize: 16,
         unselectedItemColor: Colors.grey[800],
@@ -141,7 +117,7 @@ class _DashboardFull extends State<DashboardFull> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : pages.elementAt(_selectedIndex),
+          : pages[_selectedIndex],
     );
   }
 }
