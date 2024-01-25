@@ -85,7 +85,7 @@ class AddFormState extends State<AddFormPage> {
     }
   }
 
-  void addTransaksi(Akun akun) async {
+  void addLaporan(Akun akun) async {
     setState(() {
       _isLoading = true;
     });
@@ -213,7 +213,7 @@ class AddFormState extends State<AddFormPage> {
                           child: FilledButton(
                               style: buttonStyle,
                               onPressed: () {
-                                addTransaksi(akun);
+                                addLaporan(akun);
                               },
                               child: Text(
                                 'Kirim Laporan',

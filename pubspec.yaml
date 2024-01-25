@@ -21,6 +21,8 @@ dependencies:
   firebase_auth: ^4.15.2
   cloud_firestore: ^4.13.5
   firebase_storage: ^11.5.5
+  flutter_internet_signal: ^0.0.30
+  toast: ^0.3.0
 
 dev_dependencies:
   flutter_test:
@@ -29,9 +31,9 @@ dev_dependencies:
   flutter_launcher_icons: ^0.13.1
 
 flutter_icons:
-  image_path: "assets/Logo.png" 
   android: true
   ios: true
+  image_path: "assets/Logo.png" 
 
 flutter:
   uses-material-design: true

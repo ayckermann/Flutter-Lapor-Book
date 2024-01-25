@@ -30,10 +30,12 @@ class Laporan {
 }
 
 class Komentar {
+  final String uid;
   final String nama;
   final String isi;
 
   Komentar({
+    required this.uid,
     required this.nama,
     required this.isi,
   });

@@ -27,15 +27,11 @@ class _SplashPageState extends State<SplashPage> {
         Navigator.pushReplacementNamed(context, '/login');
       });
     }
-
-    // Future.delayed(Duration.zero, () {
-    //   Navigator.pushReplacementNamed(context, '/login');
-    // });
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
         child: Text('Selamat datang di Aplikasi Laporan'),
       ),

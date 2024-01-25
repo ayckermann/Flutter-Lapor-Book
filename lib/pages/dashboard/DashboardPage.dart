@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,7 @@ import 'package:flutter_lapor_book/models/akun.dart';
 import 'package:flutter_lapor_book/pages/dashboard/AllLaporan.dart';
 import 'package:flutter_lapor_book/pages/dashboard/MyLaporan.dart';
 import 'package:flutter_lapor_book/pages/dashboard/ProfilePage.dart';
+
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -35,14 +38,20 @@ class _DashboardFull extends State<DashboardFull> {
 
   List<Widget> pages = [];
 
+ 
   void getAkun() async {
+    setState(() {
+      _isLoading = true;
+    });
     try {
+      final result = await InternetAddress.lookup('google.com');
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
           .collection('akun')
           .where('uid', isEqualTo: _auth.currentUser!.uid)
+          .limit(1)
           .get();
 
-      if (querySnapshot.docs.isNotEmpty) {
+      if (querySnapshot.docs.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         var userData = querySnapshot.docs.first.data() as Map<String, dynamic>;
 
         setState(() {
@@ -55,15 +64,26 @@ class _DashboardFull extends State<DashboardFull> {
             role: userData['role'],
           );
         });
+
+        setState(() {
+          _isLoading = false;
+        });
       }
     } catch (e) {
       print(e);
+      print("asd");
     }
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    // TODO: implement initState
+    super.initState();
     getAkun();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     pages = <Widget>[
       AllLaporan(akun: akun),
       MyLaporan(akun: akun),
@@ -114,8 +134,20 @@ class _DashboardFull extends State<DashboardFull> {
         ],
       ),
       body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
+          ? Center(
+              child: Container(
+                width: double.infinity,
+                height: 100,
+                child: Column(
+                  children: [
+                    CircularProgressIndicator(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text("Cek koneksi anda"),
+                  ],
+                ),
+              ),
             )
           : pages[_selectedIndex],
     );

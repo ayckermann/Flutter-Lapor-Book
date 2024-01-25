@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "134236590361",
-    "project_id": "lapor-book-9db05",
-    "storage_bucket": "lapor-book-9db05.appspot.com"
+    "project_number": "752280154137",
+    "project_id": "lapor-book-lsp-37a7a",
+    "storage_bucket": "lapor-book-lsp-37a7a.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:134236590361:android:26429723890c24f161b588",
+        "mobilesdk_app_id": "1:752280154137:android:1f4ef6d70b059e2990ba88",
         "android_client_info": {
-          "package_name": "com.example.flutter_keuangan"
+          "package_name": "com.ayckermann.lapor_book"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDb6_8Q68N_wTABnxODRkFmgwQnuy_bs7c"
+          "current_key": "AIzaSyCsIw7uq5ANaex-xvcYLkgXSb8jk4F9WkA"
         }
       ],
       "services": {

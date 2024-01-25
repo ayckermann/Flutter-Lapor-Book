@@ -246,6 +246,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_internet_signal:
+    dependency: "direct main"
+    description:
+      name: flutter_internet_signal
+      sha256: b4b7c2792c70fd1150cb342fe4ae44076c4e02e2ed0ed6667b40431f68a23dcd
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.30"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -573,6 +581,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.1"
+  toast:
+    dependency: "direct main"
+    description:
+      name: toast
+      sha256: "12433091e3e5a25b3a25f670126e42547c9ade135de30ad9ace45d1ddccd57c9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.0"
   typed_data:
     dependency: transitive
     description:

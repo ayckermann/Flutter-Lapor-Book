@@ -25,14 +25,14 @@ class _ListItemState extends State<ListItem> {
   final _firestore = FirebaseFirestore.instance;
   final _storage = FirebaseStorage.instance;
 
-  void deleteLaporan() async {
+  void deleteLaporan(BuildContext buildContext) async {
     try {
       await _firestore.collection('laporan').doc(widget.laporan.docId).delete();
 
       if (widget.laporan.gambar != '') {
         await _storage.refFromURL(widget.laporan.gambar!).delete();
       }
-      Navigator.popAndPushNamed(context, '/dashboard');
+      Navigator.pop(buildContext);
     } catch (e) {
       print(e);
     }
@@ -69,19 +69,19 @@ class _ListItemState extends State<ListItem> {
           if (widget.isLaporanku) {
             showDialog(
                 context: context,
-                builder: (BuildContext) {
+                builder: (buildContext) {
                   return AlertDialog(
                     title: Text('Delete ${widget.laporan.judul}?'),
                     actions: [
                       TextButton(
                         onPressed: () {
-                          Navigator.pop(context);
+                          Navigator.pop(buildContext);
                         },
                         child: Text('Batal'),
                       ),
                       TextButton(
                         onPressed: () {
-                          deleteLaporan();
+                          deleteLaporan(buildContext);
                         },
                         child: Text('Hapus'),
                       ),

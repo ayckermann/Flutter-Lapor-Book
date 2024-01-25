@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lapor_book/components/komen_dialog.dart';
 import 'package:flutter_lapor_book/components/status_dialog.dart';
@@ -84,6 +83,42 @@ class _DetailPageState extends State<DetailPage> {
         return KomenDialog(
           laporan: laporan,
           akun: akun,
+        );
+      },
+    );
+  }
+
+  void deleteKomentar(Akun akun, Laporan laporan, Komentar komentar) async {
+    CollectionReference laporanCollection = _firestore.collection('laporan');
+
+    try {
+      List<Komentar> listKomentar = laporan.komentar ?? [];
+
+      listKomentar.remove(komentar);
+
+      await laporanCollection.doc(laporan.docId).update({
+        'komentar': listKomentar,
+      });
+
+      Navigator.popAndPushNamed(context, '/dashboard');
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void dialogDeleteKomentar(Akun akun, Laporan laporan, Komentar komentar) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Delete ?"),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  deleteKomentar(akun, laporan, komentar);
+                },
+                icon: Icon(Icons.delete)),
+          ],
         );
       },
     );
@@ -220,29 +255,39 @@ class _DetailPageState extends State<DetailPage> {
                         child: ListView.builder(
                             itemCount: laporan.komentar?.length ?? 0,
                             itemBuilder: (context, index) {
-                              return Container(
-                                padding: EdgeInsets.all(10),
-                                margin: EdgeInsets.only(bottom: 10),
-                                decoration: BoxDecoration(
-                                  color: primaryColor,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      laporan.komentar![index].nama,
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      laporan.komentar![index].isi,
-                                      style: const TextStyle(
-                                        color: Colors.white,
+                              return InkWell(
+                                onLongPress: () {
+                                  if (laporan.komentar![index].uid ==
+                                      akun.uid) {
+                                    dialogDeleteKomentar(akun, laporan,
+                                        laporan.komentar![index]);
+                                  }
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.all(10),
+                                  margin: EdgeInsets.only(bottom: 10),
+                                  decoration: BoxDecoration(
+                                    color: primaryColor,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        laporan.komentar![index].nama,
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
                                       ),
-                                    ),
-                                  ],
+                                      Text(
+                                        laporan.komentar![index].isi,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               );
                             }),

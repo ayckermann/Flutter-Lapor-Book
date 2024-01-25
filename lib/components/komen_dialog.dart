@@ -33,6 +33,7 @@ class _KomenDialogState extends State<KomenDialog> {
         await laporanCollection.doc(widget.laporan.docId).update({
           'komentar': FieldValue.arrayUnion([
             {
+              'uid': widget.akun.uid,
               'nama': widget.akun.nama,
               'isi': _komenController.text,
             }

@@ -19,8 +19,10 @@ class _AllLaporanState extends State<AllLaporan> {
 
   void getLaporan() async {
     try {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await _firestore.collection('laporan').get();
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
+          .collection('laporan')
+          .orderBy("tanggal", descending: true)
+          .get();
 
       setState(() {
         listLaporan.clear();
@@ -29,6 +31,7 @@ class _AllLaporanState extends State<AllLaporan> {
 
           List<Komentar>? listKomentar = komentarData?.map((map) {
             return Komentar(
+              uid: map['uid'],
               nama: map['nama'],
               isi: map['isi'],
             );

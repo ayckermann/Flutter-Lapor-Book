@@ -23,7 +23,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -47,29 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyC6Mq-mzIVJtulTXiZP6z-t8GJLZ47JGmc',
-    appId: '1:134236590361:web:a9ec1294e44edca561b588',
-    messagingSenderId: '134236590361',
-    projectId: 'lapor-book-9db05',
-    authDomain: 'lapor-book-9db05.firebaseapp.com',
-    storageBucket: 'lapor-book-9db05.appspot.com',
-    measurementId: 'G-KPSRWQ1HTN',
+    apiKey: 'AIzaSyDQin0KQY1GjsFSs9S61U0qTsWWfEOJodo',
+    appId: '1:752280154137:web:9b734919d583676d90ba88',
+    messagingSenderId: '752280154137',
+    projectId: 'lapor-book-lsp-37a7a',
+    authDomain: 'lapor-book-lsp-37a7a.firebaseapp.com',
+    storageBucket: 'lapor-book-lsp-37a7a.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDb6_8Q68N_wTABnxODRkFmgwQnuy_bs7c',
-    appId: '1:134236590361:android:26429723890c24f161b588',
-    messagingSenderId: '134236590361',
-    projectId: 'lapor-book-9db05',
-    storageBucket: 'lapor-book-9db05.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCLaKU1WEniHxKs1pNuScwBZ_5MdRpNkYM',
-    appId: '1:134236590361:ios:c46b4299fc47a0b961b588',
-    messagingSenderId: '134236590361',
-    projectId: 'lapor-book-9db05',
-    storageBucket: 'lapor-book-9db05.appspot.com',
-    iosBundleId: 'com.example.flutterKeuangan',
+    apiKey: 'AIzaSyCsIw7uq5ANaex-xvcYLkgXSb8jk4F9WkA',
+    appId: '1:752280154137:android:1f4ef6d70b059e2990ba88',
+    messagingSenderId: '752280154137',
+    projectId: 'lapor-book-lsp-37a7a',
+    storageBucket: 'lapor-book-lsp-37a7a.appspot.com',
   );
 }

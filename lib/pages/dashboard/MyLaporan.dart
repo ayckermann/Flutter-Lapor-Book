@@ -33,6 +33,7 @@ class _MyLaporanState extends State<MyLaporan> {
 
           List<Komentar>? listKomentar = komentarData?.map((map) {
             return Komentar(
+              uid: map['uid'],
               nama: map['nama'],
               isi: map['isi'],
             );
