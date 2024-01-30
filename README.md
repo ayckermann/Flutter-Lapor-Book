@@ -3,10 +3,10 @@
 An app for Junior Mobile Programmer certification test in LSP Udinus. 
 
 The Team :
-Ayatullah Ma'arif (Frontend & Backend)
-Fahri Firdausillah, S.Kom, M.CS (Frontend & Lead) 
-Faza Faresha Affandi (Frontend)
-Rangga Dwi Saputra (UI)
+- Ayatullah Ma'arif (Frontend & Backend)
+- Fahri Firdausillah, S.Kom, M.CS (Frontend & Lead) 
+- Faza Faresha Affandi (Frontend)
+- Rangga Dwi Saputra (UI)
 
 
 ### Tutorials ###
